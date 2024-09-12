@@ -1,0 +1,59 @@
+name: Continuous Integration
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.9
+          cache: 'pip'
+          cache-dependency-path: rf-al/requirements.txt
+
+      - name: Install Python dependencies
+        run: |
+          pip install -r rf-al/requirements.txt
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'lts/*'
+
+      - name: Install Appium
+        run: npm install -g appium
+
+      - name: Start Appium Server
+        run: nohup appium -p 4725 -pa /wd/hub --log-timestamp --log-no-colors > appium.log 2>&1 &
+
+      - name: Run Android Emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          profile: pixel_3
+          script: |
+            # Verificar se o emulador está funcionando
+            adb devices
+
+      - name: Run Robot Framework Tests
+        run: robot -v APPIUM_PORT:4725 eficode/examples/simple/basics.robot
+
+      - name: Archive Appium log
+        uses: actions/upload-artifact@v4
+        with:
+          name: appium-log
+          path: appium.log
