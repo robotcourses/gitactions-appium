@@ -6,7 +6,7 @@ Esse exemplo é extremamente útil para equipes que não te orçamento para adqu
 ⚠️ Esse projeto ainda precisa de alguns refinamentos, mas é funcional.
 
 
-## Ajuda a Vakinha da Robot Courses
+## 😍 AJUDE NA VAKINHA DA ROBOT COURSES 😍
 
 Pessoal, nesse exato momento, eu estou sem notebook para gravar os vídeos do canal. Estou com uma Vakinha aberta para caso você queira e possa ajudar.
 
