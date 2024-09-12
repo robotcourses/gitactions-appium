@@ -7,8 +7,10 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout AppiumLibrary repo
         uses: actions/checkout@v3
+        with:
+          path: rf-al
 
       - name: Use Python 3.9
         uses: actions/setup-python@v5
