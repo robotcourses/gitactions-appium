@@ -30,6 +30,9 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -45,7 +48,7 @@ jobs:
 
       - name: Start up Appium
         run: |
-          nohup appium -pa /wd/hub &
+          nohup appium -p 4725 -pa /wd/hub &
 
       - name: Enable KVM group perms
         run: |
@@ -57,10 +60,6 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 34
-          target: google_apis
-          arch: x86_64
-          profile: pixel_3
-          emulator-options: -no-window -no-audio
           script: |
             robot -v APPIUM_PORT:4725 .
 
