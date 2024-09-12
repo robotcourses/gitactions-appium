@@ -64,7 +64,7 @@ jobs:
             robot -d ./reports -v APPIUM_PORT:4725 .
 
       - name: Upload test results
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: reports
@@ -79,7 +79,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Download reports
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4
         with:
           name: reports
 
