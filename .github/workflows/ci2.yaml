@@ -36,8 +36,11 @@ jobs:
       - name: Install Appium
         run: npm install -g appium
 
-      - name: Start Appium Server
-        run: nohup appium -p 4725 --log-timestamp
+      - name: Start up Appium
+        run: |
+          nohup appium --log-timestamp --log-no-colors > appium.log &
+          appium driver install uiautomator2
+          appium driver doctor uiautomator2
 
       - name: Enable KVM group perms
         run: |
