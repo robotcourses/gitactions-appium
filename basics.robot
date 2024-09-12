@@ -4,7 +4,7 @@ Library    AppiumLibrary
 
 *** Variables ***
 ${APPIUM_PORT}    4555
-${APPIUM_URL}    http://localhost:${APPIUM_PORT}
+${APPIUM_URL}    http://localhost:${APPIUM_PORT}/wd/hub
 ${AUTOMATION_NAME}    uiautomator2
 ${PLATFORM_NAME}    android
 ${PLATFORM_VERSION}    14.0

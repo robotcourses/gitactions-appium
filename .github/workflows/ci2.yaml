@@ -38,7 +38,7 @@ jobs:
 
       - name: Start up Appium
         run: |
-          nohup appium --log-timestamp --log-no-colors > appium.log &
+          nohup appium -pa /wd/hub --log-timestamp --log-no-colors > appium.log &
           appium driver install uiautomator2
 
       - name: Enable KVM group perms
