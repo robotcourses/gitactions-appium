@@ -66,6 +66,7 @@ jobs:
       - name: Start up adb
         run: |
           adb start-server
+          mkdir -p ~/.android/avd
           which avdmanager
           avdmanager -v list avd
           avdmanager --help
