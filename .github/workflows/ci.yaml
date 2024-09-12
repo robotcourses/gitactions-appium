@@ -76,12 +76,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
 
       - name: Download reports
         uses: actions/download-artifact@v4
         with:
           name: reports
+
+      - name: Display structure of downloaded files
+        run: ls -R
 
       - name: Send report to commit
         uses: joonvena/robotframework-reporter-action@v2.4
