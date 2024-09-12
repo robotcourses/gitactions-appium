@@ -40,7 +40,6 @@ jobs:
         run: |
           nohup appium --log-timestamp --log-no-colors > appium.log &
           appium driver install uiautomator2
-          appium driver doctor uiautomator2
 
       - name: Enable KVM group perms
         run: |
