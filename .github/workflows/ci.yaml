@@ -90,11 +90,13 @@ jobs:
         run: |
           nohup appium -p 4725 &
 
-      - name: Start Android Emulator
+      - name: Start Android Emulator 1
         run: |
           echo "Starting AVD..."
           nohup emulator -avd Pixel_3a_API_34 -no-window -no-audio > emulator.log 2>&1 &
-          adb wait-for-device
+
+      - name: Start Android Emulator 2
+        run: |
           adb devices
 
       - name: Run sample test
