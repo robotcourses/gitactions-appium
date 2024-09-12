@@ -1,6 +1,7 @@
 name: Continuous Integration
 
 on:
+  push:
   workflow_dispatch:
 
 jobs:
@@ -23,12 +24,7 @@ jobs:
         run:
           pip install -r rf-al/requirements.txt
 
-      - name: Use Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 'lts/*'
-
-      - name: Use Java 17
+      - name: Set up Java
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
@@ -36,75 +32,41 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          log-accepted-android-sdk-licenses: 'false'
-
-      - name: Install additional Android SDK Packages
-        run: |
-          sdkmanager 'emulator'
-          echo "$ANDROID_SDK_ROOT/emulator" >> $GITHUB_PATH
-          sdkmanager --list_installed
-
-      - name: Debug Android SDK Install
-        run: |
-          echo "ANDROID_HOME: $ANDROID_HOME"
-          echo "ANDROID_SDK_ROOT: $ANDROID_SDK_ROOT"
-          ls $ANDROID_SDK_ROOT
-          ls $ANDROID_HOME
-          grep -E -c '(vmx|svm)' /proc/cpuinfo
+          node-version: 'lts/*'
 
       - name: Install Appium
-        run: npm install -g appium
+        run: |
+          npm install -g appium
+
+      - name: Install UiAutomator2
+        run: |
+          appium driver install uiautomator2
 
       - name: Start up Appium
         run: |
-          nohup appium --log-timestamp --log-no-colors > appium.log &
-          appium driver install uiautomator2
-          appium driver doctor uiautomator2
+          nohup appium -p 4725 -pa /wd/hub &
 
-      - name: Install system-images via SDKManager
+      - name: Enable KVM group perms
         run: |
-          sdkmanager --channel=0 "system-images;android-34;google_apis;arm64-v8a"
-          sdkmanager --channel=0 "system-images;android-34;google_apis;x86_64"
-          sdkmanager --list_installed
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
 
-      - name: Start up adb
-        run: |
-          adb start-server
-          mkdir -p ~/.android/avd
-          which avdmanager
-          avdmanager -v list avd
-          avdmanager -v create avd -n Pixel_3a_API_34 -k "system-images;android-34;google_apis;x86_64" -d pixel_3a
-          echo -------
-          emulator -list-avds
-          echo -------
-
-      - name: Checkout Eficode course
-        uses: actions/checkout@v3
+      - name: Run Android Emulator
+        uses: reactivecircus/android-emulator-runner@v2
         with:
-          repository: eficode-academy/rf-mobile-testing-appium
-          path: eficode
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          profile: pixel_3
+          script: |
+            robot -v APPIUM_PORT:4725 .
 
-      - name: Debug Step
-        run: ls
-
-      - name: Start Appium Server
-        run: |
-          nohup appium -p 4725 &
-
-      - name: Start Android Emulator 1
-        # echo "Starting AVD..."  
-        run: |
-          nohup emulator -avd Pixel_3a_API_34 -no-window -no-audio > emulator.log 2>&1 &
-
-      - name: Start Android Emulator 2
-        run: |
-          adb devices
-
-      - name: Run sample test
-        run: robot -v APPIUM_PORT:4725 eficode/examples/simple/basics.robot
-
-      - name: Archive appium log
+      - name: Archive Appium log
         uses: actions/upload-artifact@v4
         with:
           name: appium-log
