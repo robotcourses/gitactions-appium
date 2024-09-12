@@ -63,14 +63,32 @@ jobs:
           sdkmanager --channel=0 "system-images;android-34;google_apis;x86_64"
           sdkmanager --list_installed
 
-      - name: Start up adb
+      - name: Start up adb 1
         run: |
           adb start-server
+
+      - name: Start up adb 2
+        run: |
           mkdir -p ~/.android/avd
+
+      - name: Start up adb 3
+        run: |
           which avdmanager
+
+      - name: Start up adb 4
+        run: |
           avdmanager -v list avd
+
+      - name: Start up adb 5
+        run: |
           avdmanager --help
+
+      - name: Start up adb 6
+        run: |
           avdmanager -v create avd -n Pixel_3a_API_34 -k "system-images;android-34;google_apis;x86_64" -d pixel_3a
+
+      - name: Start up adb 7
+        run: |
           echo -------
           emulator -list-avds
           echo -------
