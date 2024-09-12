@@ -88,10 +88,10 @@ jobs:
 
       - name: Start Appium Server
         run: |
-          nohup appium
+          nohup appium -p 4725
 
       - name: Run sample test
-        run: robot -v APPIUM_PORT:4723 eficode/examples/simple/basics.robot
+        run: robot -v APPIUM_PORT:4725 eficode/examples/simple/basics.robot
 
       - name: Archive appium log
         uses: actions/upload-artifact@v4
