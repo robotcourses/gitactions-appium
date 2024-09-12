@@ -69,25 +69,3 @@ jobs:
         with:
           name: reports
           path: reports
-  
-  generate_report:
-    if: always()
-    needs: [execute_test]   
-    runs-on: ubuntu-latest
-
-    steps:
-
-      - name: Download reports
-        uses: actions/download-artifact@v4
-        with:
-          name: reports
-
-      - name: Display structure of downloaded files
-        run: ls -R
-
-      - name: Send report to commit
-        uses: joonvena/robotframework-reporter-action@v2.4
-        with:
-          gh_access_token: ${{ secrets.GITHUB_TOKEN }}
-          sha: ${{ github.sha }}
-          pull_request_id: ${{ github.event.number }}
