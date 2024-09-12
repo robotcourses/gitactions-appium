@@ -5,14 +5,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
-    name: Test
+  execute_test:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout AppiumLibrary repo
-        uses: actions/checkout@v3
-        with:
-          path: rf-al
+        uses: actions/checkout@v4
 
       - name: Use Python 3.9
         uses: actions/setup-python@v5
@@ -22,7 +19,7 @@ jobs:
 
       - name: Install Dependencies
         run:
-          pip install -r rf-al/requirements.txt
+          pip install -r requirements.txt
 
       - name: Set up Java
         uses: actions/setup-java@v3
@@ -64,10 +61,31 @@ jobs:
           arch: x86_64
           profile: pixel_3
           script: |
-            robot -v APPIUM_PORT:4725 .
+            robot -d ./reports -v APPIUM_PORT:4725 .
 
-      - name: Archive Appium log
-        uses: actions/upload-artifact@v4
+      - name: Upload test results
+        uses: actions/upload-artifact@v1
+        if: always()
         with:
-          name: appium-log
-          path: appium.log
+          name: reports
+          path: reports
+  
+  generate_report:
+    if: always()
+    needs: [execute_test]   
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download reports
+        uses: actions/download-artifact@v1
+        with:
+          name: reports
+
+      - name: Send report to commit
+        uses: joonvena/robotframework-reporter-action@v2.4
+        with:
+          gh_access_token: ${{ secrets.GITHUB_TOKEN }}
+          sha: ${{ github.sha }}
+          pull_request_id: ${{ github.event.number }}
