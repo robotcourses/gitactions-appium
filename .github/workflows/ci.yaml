@@ -79,9 +79,9 @@ jobs:
         run: |
           avdmanager -v list avd
 
-      - name: Start up adb 5
-        run: |
-          avdmanager --help
+      # - name: Start up adb 5
+      #   run: |
+      #     avdmanager --help
 
       - name: Start up adb 6
         run: |
