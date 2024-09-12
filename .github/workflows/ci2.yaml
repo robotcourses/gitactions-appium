@@ -60,6 +60,9 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 34
+          target: google_apis
+          arch: x86_64
+          profile: pixel_3
           script: |
             robot -v APPIUM_PORT:4725 .
 
