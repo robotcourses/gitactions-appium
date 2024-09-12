@@ -19,9 +19,7 @@ jobs:
 
       - name: Install Dependencies
         run:
-          pip install robotframework
-          pip install robotframework-appiumlibrary
-          pip install nodeenv
+          pip install -r .requirements.txt
 
       - name: Use Node.js
         uses: actions/setup-node@v3
