@@ -11,6 +11,13 @@ jobs:
         with:
           path: rf-al
 
+      # - name: Use Python 3.9
+      #   uses: actions/setup-python@v5
+      #   with:
+      #     python-version: 3.9
+      #     cache: 'pip'
+      #     cache-dependency-path: rf-al/setup.py
+
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
@@ -32,6 +39,7 @@ jobs:
           sdkmanager 'emulator'
           echo "$ANDROID_SDK_ROOT/emulator" >> $GITHUB_PATH
           sdkmanager --list_installed
+
       - name: Debug Android SDK Install
         run: |
           echo "ANDROID_HOME: $ANDROID_HOME"
@@ -39,12 +47,6 @@ jobs:
           ls $ANDROID_SDK_ROOT
           ls $ANDROID_HOME
           grep -E -c '(vmx|svm)' /proc/cpuinfo
-      - name: Use Python 3.9
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.9
-          cache: 'pip'
-          cache-dependency-path: rf-al/setup.py
 
       - name: Install Appium
         run: npm install -g appium
@@ -54,11 +56,13 @@ jobs:
           nohup appium --log-timestamp --log-no-colors > appium.log &
           appium driver install uiautomator2
           appium driver doctor uiautomator2
+
       - name: Install system-images via SDKManager
         run: |
           sdkmanager --channel=0 "system-images;android-34;google_apis;arm64-v8a"
           sdkmanager --channel=0 "system-images;android-34;google_apis;x86_64"
           sdkmanager --list_installed
+
       - name: Start up adb
         run: |
           adb start-server
@@ -69,6 +73,7 @@ jobs:
           echo -------
           emulator -list-avds
           echo -------
+
       - name: Checkout Eficode course
         uses: actions/checkout@v3
         with:
