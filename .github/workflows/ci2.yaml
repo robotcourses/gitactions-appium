@@ -1,4 +1,4 @@
-name: Continuous Integration
+name: Continuous Integration 2
 
 on: [push, pull_request]
 
@@ -15,7 +15,6 @@ jobs:
         with:
           python-version: 3.9
           cache: 'pip'
-          cache-dependency-path: rf-al/requirements.txt
 
       - name: Install Python dependencies
         run: |
