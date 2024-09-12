@@ -55,8 +55,8 @@ jobs:
           script: |
             adb devices
 
-      - name: Run Robot Framework Tests
-        run: robot -v APPIUM_PORT:4725 eficode/examples/simple/basics.robot
+      - name: Run sample test
+        run: robot -v APPIUM_PORT:4725 .
 
       - name: Archive Appium log
         uses: actions/upload-artifact@v4
