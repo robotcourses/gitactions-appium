@@ -47,15 +47,19 @@ jobs:
         run: |
           nohup appium -p 4725 -pa /wd/hub &
 
+      - name: Install Android SDK system image
+        run: |
+          sdkmanager --install "system-images;android-34;google_apis;x86_64"
+
+      - name: Create Device
+        run: |
+          echo no | avdmanager create avd -n "Pixel_7_Pro_API_34" -k "system-images;android-34;google_apis;x86_64" -d pixel_7_pro
+
       - name: Enable KVM group perms
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
-
-      - name: Create Pixel 7 Pro AVD
-        run: |
-          echo no | avdmanager create avd -n "Pixel_7_Pro_API_34" -k "system-images;android-34;google_apis;x86_64" -d pixel_7_pro
 
       - name: Run Android Emulator
         uses: reactivecircus/android-emulator-runner@v2
