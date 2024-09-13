@@ -53,6 +53,12 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
+      - name: Create Pixel 7 Pro AVD
+        run: |
+          echo no | avdmanager create avd -n "Pixel_7_Pro_API_34" -k "system-images;android-34;google_apis;x86_64" -d pixel_7_pro
+          # List AVDs to verify
+          avdmanager list avd
+
       - name: Run Android Emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
