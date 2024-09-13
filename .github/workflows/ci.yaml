@@ -59,7 +59,7 @@ jobs:
           api-level: 34
           target: google_apis
           arch: x86_64
-          profile: pixel_3
+          profile: pixel_6_pro
           script: |
             avdmanager list device
             robot -d ./reports -v APPIUM_PORT:4725 .
