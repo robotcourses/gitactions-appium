@@ -61,6 +61,7 @@ jobs:
           arch: x86_64
           profile: pixel_3
           script: |
+            avdmanager list device
             robot -d ./reports -v APPIUM_PORT:4725 .
 
       - name: Upload test results
